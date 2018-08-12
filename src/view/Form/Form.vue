@@ -1,0 +1,205 @@
+<template>
+  <div class="inner">
+    <div class="wrap">
+      <div class="header">
+        <h3 class="title">
+          华为智能手环-官方活动-正式启动
+        </h3>
+        <div class="owner">
+          <span class="date">2018-08-12</span>
+          <a href="#">官方礼品发放中心</a>
+          <span class="report">举报</span>
+        </div>
+      </div>
+      <div class="content">
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img1.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img2.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img3.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img4.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img5.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img6.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img7.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img8.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img9.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img10.jpg" alt="404">
+        </div>
+        <div class="imgContent">
+          <img class="imgStyle" src="../../assets/img/img11.jpg" alt="404">
+        </div>
+      </div>
+      <div class="join_div">
+        <div>请选择产品<span class="redText">*</span></div>
+        <el-radio-group v-model="product">
+          <el-radio label="静谧蓝"></el-radio>
+          <el-radio label="摩卡棕"></el-radio>
+          <el-radio label="韵律黑"></el-radio>
+        </el-radio-group>
+        <div>电话充值卡类型<span class="redText">*</span></div>
+        <el-select v-model="phoneCardType" placeholder="请选择类型">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.value"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <div>收货人姓名<span class="redText">*</span></div>
+        <el-input v-model="name" placeholder="请输入姓名"></el-input>
+        <div>手机号码<span class="redText">*</span></div>
+        <el-input v-model="phoneNum" placeholder="请输入手机号码"></el-input>
+        <div>收货地址<span class="redText">*</span></div>
+        <v-distpicker @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea"></v-distpicker>
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="详细地址"
+          v-model="address">
+        </el-input>
+        <div>邮费自理<span class="redText">*</span></div>
+        <div>
+          <el-checkbox v-model="isAccept">请接收邮费自理</el-checkbox>
+          <span class="checkboxText">( 运费+保价费在19至39元之间，收到货支付给快递小哥即可，偏远地区最高不超过39元，不接受的不予发货！）</span>
+        </div>
+        <div class="redText">温馨提示</div>
+        <div class="footBorder">极个别市，会出现区县填写不了的情况！这种情况您将省市区县街道一起填入详细地址即可！*亲，由于价值免费试戴-名额仅剩36名-即将恢复原价免费赠送给您，所以邮费还需自理哦(39)我们还随包裹赠送一张价值100元手机话费充值卡以弥补您的运费哦，祝您生活愉快*</div>
+      </div>
+      <div class="footer">
+        <div class="submitBtn">填写好了  确认提交</div>
+        <a href="#" class="report">举报</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import VDistpicker from "v-distpicker";
+export default {
+  components: { VDistpicker },
+  data() {
+    return {
+      product: "",
+      phoneCardType: "",
+      name: "",
+      phoneNum: "",
+      province: "",
+      city: "",
+      area: "",
+      address: "",
+      isAccept: false,
+      options: [
+        {
+          value: "移动",
+          label: "移动"
+        },
+        {
+          value: "联通",
+          label: "联通"
+        },
+        {
+          value: "电信",
+          label: "电信"
+        }
+      ]
+    };
+  },
+  methods: {
+    onChangeProvince(e) {
+      console.log(e);
+      this.province = e.value;
+    },
+    onChangeCity(e) {
+      console.log(e);
+      this.city = e.value;
+    },
+    onChangeArea(e) {
+      console.log(e);
+      this.area = e.value;
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
+.inner {
+  margin: 1.2vh;
+  height: 98vh;
+  width: 96vw;
+  overflow: scroll;
+}
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.title {
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #e7e7eb;
+  font-size: 24px;
+}
+.owner {
+  font-size: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.report {
+  margin-left: auto;
+  margin-right: 5px;
+}
+.imgStyle {
+  max-width: 100%;
+  height: auto;
+}
+.checkboxText {
+  font-size: 14px;
+}
+.redText {
+  color: #fd521e;
+}
+.footBorder {
+  padding-bottom: 5vh;
+  border-bottom: 1px solid #333333;
+}
+.footer {
+  margin-top: 5vh;
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+}
+.submitBtn {
+  display: inline-block;
+  height: 7vw;
+  width: 36vw;
+  text-align: center;
+  line-height: 7vw;
+  background-color: #ff761a;
+  color: white;
+}
+
+</style>
+
