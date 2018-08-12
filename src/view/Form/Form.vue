@@ -47,13 +47,13 @@
         </div>
       </div>
       <div class="join_div">
-        <div>请选择产品<span class="redText">*</span></div>
+        <div class="question">请选择产品<span class="redText">*</span></div>
         <el-radio-group v-model="product">
           <el-radio label="静谧蓝"></el-radio>
           <el-radio label="摩卡棕"></el-radio>
           <el-radio label="韵律黑"></el-radio>
         </el-radio-group>
-        <div>电话充值卡类型<span class="redText">*</span></div>
+        <div class="question">电话充值卡类型<span class="redText">*</span></div>
         <el-select v-model="phoneCardType" placeholder="请选择类型">
           <el-option
             v-for="item in options"
@@ -62,11 +62,11 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <div>收货人姓名<span class="redText">*</span></div>
+        <div class="question">收货人姓名<span class="redText">*</span></div>
         <el-input v-model="name" placeholder="请输入姓名"></el-input>
-        <div>手机号码<span class="redText">*</span></div>
+        <div class="question">手机号码<span class="redText">*</span></div>
         <el-input v-model="phoneNum" placeholder="请输入手机号码"></el-input>
-        <div>收货地址<span class="redText">*</span></div>
+        <div class="question">收货地址<span class="redText">*</span></div>
         <v-distpicker @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea"></v-distpicker>
         <el-input
           type="textarea"
@@ -74,16 +74,16 @@
           placeholder="详细地址"
           v-model="address">
         </el-input>
-        <div>邮费自理<span class="redText">*</span></div>
+        <div class="question">邮费自理<span class="redText">*</span></div>
         <div>
           <el-checkbox v-model="isAccept">请接收邮费自理</el-checkbox>
           <span class="checkboxText">( 运费+保价费在19至39元之间，收到货支付给快递小哥即可，偏远地区最高不超过39元，不接受的不予发货！）</span>
         </div>
-        <div class="redText">温馨提示</div>
+        <div class="redText question">温馨提示</div>
         <div class="footBorder">极个别市，会出现区县填写不了的情况！这种情况您将省市区县街道一起填入详细地址即可！*亲，由于价值免费试戴-名额仅剩36名-即将恢复原价免费赠送给您，所以邮费还需自理哦(39)我们还随包裹赠送一张价值100元手机话费充值卡以弥补您的运费哦，祝您生活愉快*</div>
       </div>
       <div class="footer">
-        <div class="submitBtn">填写好了  确认提交</div>
+        <div @click="submit" class="submitBtn">填写好了  确认提交</div>
         <a href="#" class="report">举报</a>
       </div>
     </div>
@@ -133,6 +133,39 @@ export default {
     onChangeArea(e) {
       console.log(e);
       this.area = e.value;
+    },
+    submit() {
+      const id = this.$route.query.id;
+      const userdata = {
+        id: id,
+        product: this.product,
+        phoneCardType: this.phoneCardType,
+        name: this.name,
+        phoneNum: this.phoneNum,
+        province: this.province,
+        city: this.city,
+        area: this.area,
+        address: this.address,
+        isAccept: this.isAccept,
+      };
+      if(this.isAccept) {
+        if(this.product && this.phoneCardType && this.name && this.phoneNum && this.province && this.city && this.area && this.address ){
+          const firstStr = this.phoneNum.substr(0,1);
+          console.log(firstStr);
+          console.log(this.phoneNum.length);
+          if(this.phoneNum.length == 11 && firstStr == '1') {
+            console.log(userdata);
+          }else {
+            alert('手机号码不正确');
+          }
+          
+        }else {
+          alert('含*的内容不能为空');
+        }
+      }else {
+         alert('请接收邮费自理');
+      }
+      
     }
   }
 };
@@ -200,6 +233,8 @@ export default {
   background-color: #ff761a;
   color: white;
 }
-
+.question {
+  margin: 3vh 0;
+}
 </style>
 
