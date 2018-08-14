@@ -6,8 +6,16 @@ import router from './router'
 //引入elementui
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
+//引入vux
+import { CellBox,  Group, XButton, Icon  } from 'vux'
+
 //引入全局组件
 import VDistpicker from 'v-distpicker'
+Vue.component('cell-box', CellBox);
+Vue.component('group', Group);
+Vue.component('x-button', XButton);
+Vue.component('icon', Icon);
 Vue.component('v-distpicker', VDistpicker);
 
 Vue.use(ElementUI);

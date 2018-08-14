@@ -6,9 +6,9 @@
           华为智能手环-官方活动-正式启动
         </h3>
         <div class="owner">
-          <span class="date">2018-08-12</span>
-          <a href="#">官方礼品发放中心</a>
-          <span class="report">举报</span>
+          <span class="date">{{date}}</span>
+          <a class="titleText" href="#">官方礼品发放中心</a>
+          <span @click="gotoReport" class="report">举报</span>
         </div>
       </div>
       <div class="content">
@@ -69,6 +69,7 @@
         <div class="question">收货地址<span class="redText">*</span></div>
         <v-distpicker @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea"></v-distpicker>
         <el-input
+          class="address"
           type="textarea"
           :rows="3"
           placeholder="详细地址"
@@ -84,7 +85,7 @@
       </div>
       <div class="footer">
         <div @click="submit" class="submitBtn">填写好了  确认提交</div>
-        <a href="#" class="report">举报</a>
+        <span @click="gotoReport" href="#" class="report">举报</span>
       </div>
     </div>
   </div>
@@ -92,6 +93,7 @@
 
 <script>
 import VDistpicker from "v-distpicker";
+import axios from "axios";
 export default {
   components: { VDistpicker },
   data() {
@@ -121,6 +123,22 @@ export default {
       ]
     };
   },
+  computed: {
+    date() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate();
+      return `${year}-${month}-${strDate}`;
+    }
+  },
+  mounted() {
+    // var date = new Date();
+    // var year = date.getFullYear();
+    // var month = date.getMonth() + 1;
+    // var strDate = date.getDate();
+    // console.log(year, month, strDate);
+  },
   methods: {
     onChangeProvince(e) {
       console.log(e);
@@ -134,10 +152,15 @@ export default {
       console.log(e);
       this.area = e.value;
     },
-    submit() {
+    gotoReport() {
+      this.$router.push("/report");
+    },
+    async submit() {
       const id = this.$route.query.id;
-      const userdata = {
+      const staffId = this.$route.query.staffId;
+      const userData = {
         id: id,
+        staffId: staffId,
         product: this.product,
         phoneCardType: this.phoneCardType,
         name: this.name,
@@ -146,26 +169,44 @@ export default {
         city: this.city,
         area: this.area,
         address: this.address,
-        isAccept: this.isAccept,
+        isAccept: this.isAccept
       };
-      if(this.isAccept) {
-        if(this.product && this.phoneCardType && this.name && this.phoneNum && this.province && this.city && this.area && this.address ){
-          const firstStr = this.phoneNum.substr(0,1);
-          console.log(firstStr);
-          console.log(this.phoneNum.length);
-          if(this.phoneNum.length == 11 && firstStr == '1') {
-            console.log(userdata);
-          }else {
-            alert('手机号码不正确');
+      if (this.isAccept) {
+        if (
+          this.product &&
+          this.phoneCardType &&
+          this.name &&
+          this.phoneNum &&
+          this.province &&
+          this.city &&
+          this.area &&
+          this.address
+        ) {
+          const firstStr = this.phoneNum.substr(0, 1);
+          // console.log(firstStr);
+          // console.log(this.phoneNum.length);
+          if (this.phoneNum.length == 11 && firstStr == "1") {
+            const submitRes = await axios.post("/saveUserData", userData);
+            if (submitRes.data === "success") {
+              this.$message({
+                message: "提交成功",
+                type: "success"
+              });
+              location.reload();
+            } else {
+              this.$message.error("提交失败，一个电话号只能参加一次");
+              location.reload();
+            }
+            console.log(submitRes.data);
+          } else {
+            alert("手机号码不正确");
           }
-          
-        }else {
-          alert('含*的内容不能为空');
+        } else {
+          alert("含*的内容不能为空");
         }
-      }else {
-         alert('请接收邮费自理');
+      } else {
+        alert("请接收邮费自理");
       }
-      
     }
   }
 };
@@ -187,6 +228,13 @@ export default {
   max-width: 640px;
   margin: 0 auto;
 }
+.date {
+  margin-right: 5px;
+}
+.titleText {
+  color: #607fa6;
+  text-decoration: none;
+}
 .title {
   padding-bottom: 10px;
   margin-bottom: 14px;
@@ -203,6 +251,7 @@ export default {
 .report {
   margin-left: auto;
   margin-right: 5px;
+  color: #607fa6;
 }
 .imgStyle {
   max-width: 100%;
@@ -219,7 +268,7 @@ export default {
   border-bottom: 1px solid #333333;
 }
 .footer {
-  margin-top: 5vh;
+  margin-top: 4vh;
   display: flex;
   align-items: flex-start;
   font-size: 14px;
@@ -235,6 +284,9 @@ export default {
 }
 .question {
   margin: 3vh 0;
+}
+.address {
+  margin-top: 10px;
 }
 </style>
 

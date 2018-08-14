@@ -8,7 +8,7 @@
       <div class="inputContent">
         <el-input type="password" v-model="password" placeholder="请输入密码"></el-input>
       </div>
-      <div class="submitBtn">
+      <div class="submitBtn" @click="loginSubmit">
         提交
       </div>
     </div>
@@ -16,9 +16,37 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
-    return {};
+    return {
+      account: "",
+      password: "",
+    };
+  },
+  async mounted() {
+    // const res = await axios.get("/saveAdmin");
+    
+  },
+  methods: {
+    async loginSubmit() {
+      console.log(this.account,this.password);
+      const loginRes = await axios.post('/adminLogin',{
+        account: this.account,
+        password: this.password
+      });
+      if(loginRes.data === "success") {
+        this.$message({
+          message: '登录成功',
+          type: 'success'
+        });
+        localStorage.setItem("adminId", this.account);
+        this.$router.replace("/admin/links");
+
+      }else {
+        this.$message.error('登录失败，密码错误');
+      }
+    }
   }
 };
 </script>

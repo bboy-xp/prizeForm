@@ -32,17 +32,17 @@
       
     </div>
     <div class="tableContent">
-      <dic class="system-head">
+      <div class="system-head">
         <span class="system-head-text">欢迎你, 超级管理员</span>
-      </dic>
+      </div>
       <div class="tableBox">
         <div class="addStaffContent">
           <div class="inputContent">
             <span class="staffNameText">用户名：</span>
-            <el-input v-model="staffName" placeholder="请输入用户名"></el-input>
+            <el-input v-model="staffId" placeholder="请输入用户名"></el-input>
           </div>
           <div class="submitBtn">
-            <el-button type="primary">创建</el-button>
+            <el-button @click="backtoLinks" type="primary">创建</el-button>
           </div>
         </div>
       </div>
@@ -51,14 +51,40 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      staffName: "",
+      staffId: ""
     };
   },
   methods: {
-    
+    async backtoLinks() {
+      const adminId = localStorage.getItem("adminId");
+      const addStaffRes = await axios.post("/addStaff", {
+        staffId: this.staffId,
+        adminId: adminId
+      });
+      console.log(addStaffRes);
+      if (addStaffRes.data === "success") {
+        this.$message({
+          message: "添加成功",
+          type: "success"
+        });
+        this.$router.replace({path: "/admin/links"});
+      } else {
+        this.$message.error("添加失败，员工名已存在");
+      }
+      
+    }
+  },
+  mounted() {
+    //判断用户是否登录
+    if (!!localStorage.getItem("adminId")) {
+      //用户已登陆
+    } else {
+      this.$router.replace("/admin/adminLogin");
+    }
   }
 };
 </script>
@@ -93,7 +119,6 @@ export default {
 }
 .user-panel-text {
   margin-left: 5px;
-  
 }
 .user-panel-text-color {
   color: #0e90d2;
@@ -107,7 +132,7 @@ export default {
   height: 82px;
 }
 .navContent {
-  flex-basis: 18%;
+  flex-basis: 15%;
 }
 .sidebar-nav-heading {
   padding: 24px 17px;
@@ -128,7 +153,6 @@ export default {
   justify-content: flex-end;
   align-items: center;
   border-bottom: solid 1px #e6e6e6;
-
 }
 .system-head-text {
   color: #999;

@@ -32,21 +32,21 @@
       
     </div>
     <div class="tableContent">
-      <dic class="system-head">
+      <div class="system-head">
         <span class="system-head-text">欢迎你, 超级管理员</span>
-      </dic>
+      </div>
       <div class="tableBox">
         <div class="addStaffContent">
           <el-button @click="addStaff" class="addStaffBtn" type="primary"><i class="el-icon-plus"></i><span>添加链接</span></el-button>
         </div>
         <el-table
-          :data="tableData"
+          :data="linksTableData"
           stripe
           style="width: 100%">
           <el-table-column
             prop="staffId"
             label="员工名"
-            width="80">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="formUrl"
@@ -61,9 +61,10 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="100">
+            
+            >
             <template slot-scope="scope">
-              <div class="deleteBtn"><i class="el-icon-delete"></i><span class="text-margin">删除</span></div>
+              <div class="deleteBtn" @click="handleDelete(scope.$index, scope.row)"><i class="el-icon-delete"></i><span class="text-margin">删除</span></div>
             </template>
           </el-table-column>
         </el-table>
@@ -73,27 +74,23 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          staffId: "1",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl: "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258",
-        },
-        {
-          staffId: "2",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl: "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258",
-        },
-        {
-          staffId: "2",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl: "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258",
-        },
-      ]
+      linksTableData: []
     };
+  },
+  async mounted() {
+    //判断用户是否登录
+    if (!!localStorage.getItem("adminId")) {
+      //用户已登陆
+    } else {
+      this.$router.replace("/admin/adminLogin");
+    }
+
+    const getLinksTableData = await axios.get("/getLinksTableData");
+    this.linksTableData = getLinksTableData.data;
   },
   methods: {
     gotoOrder() {
@@ -101,6 +98,32 @@ export default {
     },
     addStaff() {
       this.$router.replace({ path: "/admin/addStaff" });
+    },
+    handleDelete(index, row) {
+      console.log(index);
+      console.log(row);
+      this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(async () => {
+          const result = await axios.post("/deleteStaff", row);
+
+          this.linksTableData = result.data;
+
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };
@@ -136,7 +159,6 @@ export default {
 }
 .user-panel-text {
   margin-left: 5px;
-  
 }
 .user-panel-text-color {
   color: #0e90d2;
@@ -150,7 +172,7 @@ export default {
   height: 82px;
 }
 .navContent {
-  flex-basis: 18%;
+  flex-basis: 15%;
 }
 .sidebar-nav-heading {
   padding: 24px 17px;
@@ -171,7 +193,6 @@ export default {
   justify-content: flex-end;
   align-items: center;
   border-bottom: solid 1px #e6e6e6;
-
 }
 .system-head-text {
   color: #999;

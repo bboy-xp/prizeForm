@@ -10,7 +10,48 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/saveAdmin': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/adminLogin': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/addStaff': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/getLinksTableData': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/saveUserData': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/getOrderTableData': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/deleteUserData': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/deleteStaff': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/getSelectedData': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/getAllStaff': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

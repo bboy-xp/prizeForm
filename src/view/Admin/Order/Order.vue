@@ -32,36 +32,85 @@
       
     </div>
     <div class="tableContent">
-      <dic class="system-head">
+      <div class="system-head">
         <span class="system-head-text">欢迎你, 超级管理员</span>
-      </dic>
+      </div>
       <div class="tableBox">
+        <el-select @change="selectChange" v-model="selectedStaff" placeholder="查看员工业绩">
+          <el-option
+            v-for="item in options"
+            :key="item.staffId"
+            :label="item.staffId"
+            :value="item.staffId">
+          </el-option>
+        </el-select>
+        <el-button @click="getAllOrder" type="primary">显示全部订单</el-button>
         <div class="tableBox">
         <el-table
-          :data="tableData"
+          :data="orderTableData"
           stripe
           style="width: 100%">
           <el-table-column
+            prop="num"
+            label="#"
+            width="60">
+          </el-table-column>
+          <el-table-column
             prop="staffId"
-            label="员工名"
+            label="推广人"
             width="80">
           </el-table-column>
           <el-table-column
-            prop="formUrl"
-            label="链接地址"
+            prop="product"
+            label="产品"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="phoneCardType"
+            label="充值卡类型"
+            width="90">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="姓名"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            prop="phoneNum"
+            label="电话号"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            label="省"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="city"
+            label="市"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="area"
+            label="区"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="详细地址"
             width="400">
           </el-table-column>
           <el-table-column
-            prop="searchUrl"
-            label="数据查询后台"
-            width="450">
+            prop="createdAt"
+            label="提交时间"
+            width="110">
           </el-table-column>
           <el-table-column
             fixed="right"
             label="操作"
-            width="100">
+            >
             <template slot-scope="scope">
-              <div class="deleteBtn"><i class="el-icon-delete"></i><span class="text-margin">删除</span></div>
+              <div class="deleteBtn"  @click="handleDelete(scope.$index, scope.row)"><i class="el-icon-delete"></i><span class="text-margin">删除</span></div>
             </template>
           </el-table-column>
         </el-table>
@@ -72,53 +121,73 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          staffId: "1",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl:
-            "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258"
-        },
-        {
-          staffId: "2",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl:
-            "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258"
-        },
-        {
-          staffId: "2",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl:
-            "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258"
-        },
-        {
-          staffId: "1",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl:
-            "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258"
-        },
-        {
-          staffId: "2",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl:
-            "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258"
-        },
-        {
-          staffId: "2",
-          formUrl: "http://www.china-liantong.com.cn/thsProduction.html?id=258",
-          searchUrl:
-            "http://www.china-liantong.com.cn/admin/Chaxun/login.html?id=258"
-        }
-      ]
+      selectedStaff: "",
+      orderTableData: [],
+      options: []
     };
   },
   methods: {
     gotoLinks() {
       this.$router.replace({ path: "/admin/links" });
+    },
+    async selectChange() {
+      // console.log(this.selectedStaff);
+      const selectedStaff = this.selectedStaff;
+      const getSelectedData = await axios.post("/getSelectedData", {
+        selectedStaffId: selectedStaff
+      });
+      // console.log(getSelectedData.data);
+      this.orderTableData = getSelectedData.data;
+    },
+    async getAllOrder() {
+      const getOrderTableData = await axios.get("/getOrderTableData");
+      this.orderTableData = getOrderTableData.data;
+    },
+    handleDelete(index, row) {
+      // console.log(index);
+      // console.log(row);
+      this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(async () => {
+          const result = await axios.post("/deleteUserData", row);
+
+          this.orderTableData = result.data;
+
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
+  },
+  async mounted() {
+    //判断用户是否登录
+    if (!!localStorage.getItem("adminId")) {
+      //用户已登陆
+    } else {
+      this.$router.replace("/admin/adminLogin");
+    }
+
+    const getAllStaff = await axios.get("/getAllStaff");
+    this.options = getAllStaff.data;
+
+    const getOrderTableData = await axios.get("/getOrderTableData");
+    this.orderTableData = getOrderTableData.data;
+    // console.log(this.orderTableData);
   }
 };
 </script>
@@ -166,7 +235,7 @@ export default {
   height: 82px;
 }
 .navContent {
-  flex-basis: 18%;
+  flex-basis: 15%;
 }
 .sidebar-nav-heading {
   padding: 24px 17px;
