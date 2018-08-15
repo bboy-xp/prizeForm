@@ -25,7 +25,7 @@ export default {
     };
   },
   async mounted() {
-    const res = await axios.get("/saveAdmin");
+    // const res = await axios.get("/saveAdmin");
     
   },
   methods: {
