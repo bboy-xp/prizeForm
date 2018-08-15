@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navContent">
       <div class="header-logo">
-        xp后台管理系统
+        <span class="myLogo">xp</span>后台管理系统
       </div>
       <div class="user-panel">
         <div class="user-panel-headImg">
@@ -12,7 +12,7 @@
         <div class="user-panel-edit-admin"><i class="el-icon-edit"></i><span class="user-panel-text user-panel-text-color">管理员管理入口</span></div>
       </div>
       <div class="sidebar-nav-heading">
-        <span>Controller </span>
+        <span class="nav-heading-text">Controller </span>
         <span>管理控制中心</span>
       </div>
       <div class="nav">
@@ -45,11 +45,13 @@
           </el-option>
         </el-select>
         <el-button @click="getAllOrder" type="primary">显示全部订单</el-button>
+        <el-button @click="exportExcel" class="exportExcel" type="primary"><i class="el-icon-plus"></i><span>导出Excel</span></el-button>
         <div class="tableBox">
         <el-table
           :data="orderTableData"
           stripe
-          style="width: 100%">
+          style="width: 100%"
+          id="out-table">
           <el-table-column
             prop="num"
             label="#"
@@ -106,7 +108,6 @@
             width="110">
           </el-table-column>
           <el-table-column
-            fixed="right"
             label="操作"
             >
             <template slot-scope="scope">
@@ -122,6 +123,8 @@
 
 <script>
 import axios from "axios";
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 export default {
   data() {
     return {
@@ -172,6 +175,25 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    exportExcel() {
+      /* generate workbook object from table */
+      var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: "application/octet-stream" }),
+          "订单表.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
     }
   },
   async mounted() {
@@ -198,6 +220,10 @@ export default {
   height: 100vh;
   width: 100vw;
   display: flex;
+}
+.myLogo {
+  font-size: 16px;
+  font-weight: bold;
 }
 .header-logo {
   height: 57px;
@@ -245,6 +271,11 @@ export default {
   border-right: solid 1px #e6e6e6;
   border-bottom: solid 1px #e6e6e6;
 }
+.nav-heading-text {
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 16px
+}
 .tableContent {
   flex: 1;
   display: flex;
@@ -279,5 +310,10 @@ export default {
 }
 .text-margin {
   margin-left: 3px;
+}
+.exportExcel {
+  width: 120px;
+  margin-bottom: 10px;
+  margin-left: 15px;
 }
 </style>

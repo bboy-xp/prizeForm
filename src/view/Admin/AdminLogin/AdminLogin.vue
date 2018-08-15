@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="loginContent">
-      <div class="title">xp管理后台</div>
+      <div class="title"><span class="myLogo">xp</span>管理后台</div>
       <div class="inputContent">
         <el-input v-model="account" placeholder="请输入账号"></el-input>
       </div>
@@ -61,6 +61,10 @@ export default {
   height: 100%;
   top: 0px;
   background-color: #e9ecf3;
+}
+.myLogo {
+  font-size: 16px;
+  font-weight: bold;
 }
 .loginContent {
   z-index: 10;

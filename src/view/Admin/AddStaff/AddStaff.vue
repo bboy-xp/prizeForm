@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navContent">
       <div class="header-logo">
-        xp后台管理系统
+        <span class="myLogo">xp</span>后台管理系统
       </div>
       <div class="user-panel">
         <div class="user-panel-headImg">
@@ -12,18 +12,18 @@
         <div class="user-panel-edit-admin"><i class="el-icon-edit"></i><span class="user-panel-text user-panel-text-color">管理员管理入口</span></div>
       </div>
       <div class="sidebar-nav-heading">
-        <span>Controller </span>
+        <span class="nav-heading-text">Controller </span>
         <span>管理控制中心</span>
       </div>
       <div class="nav">
         <el-menu
           default-active="1"
           class="el-menu-vertical-demo">
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="gotoLinks">
             <i class="el-icon-edit-outline"></i>
             <span slot="title">链接管理</span>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="2" @click="gotoOrder">
             <i class="el-icon-tickets"></i>
             <span slot="title">订单管理</span>
           </el-menu-item>
@@ -75,8 +75,14 @@ export default {
       } else {
         this.$message.error("添加失败，员工名已存在");
       }
-      
-    }
+    },
+    gotoLinks() {
+      this.$router.replace({ path: "/admin/links" });
+    },
+    gotoOrder() {
+      this.$router.replace({ path: "/admin/order" });
+    },
+
   },
   mounted() {
     //判断用户是否登录
@@ -95,6 +101,10 @@ export default {
   height: 100vh;
   width: 100vw;
   display: flex;
+}
+.myLogo {
+  font-size: 16px;
+  font-weight: bold;
 }
 .header-logo {
   height: 57px;
@@ -141,6 +151,11 @@ export default {
   border-top: solid 1px #e6e6e6;
   border-right: solid 1px #e6e6e6;
   border-bottom: solid 1px #e6e6e6;
+}
+.nav-heading-text {
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 16px
 }
 .tableContent {
   flex: 1;
