@@ -12,43 +12,43 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/saveAdmin': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/adminLogin': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/addStaff': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/getLinksTableData': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/saveUserData': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/getOrderTableData': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/deleteUserData': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/deleteStaff': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/getSelectedData': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       },
       '/getAllStaff': {
-        target: 'http://127.0.0.1:7001',
+        target: 'http://127.0.0.1:7002',
         changeOrigin: 'true',
       }
     },
